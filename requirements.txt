@@ -1,0 +1,5 @@
+django
+djangorestframework
+psycopg2-binary
+django-extensions
+pyyaml
