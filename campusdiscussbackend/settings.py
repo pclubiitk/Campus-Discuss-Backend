@@ -43,6 +43,7 @@ ALLOWED_HOSTS = '*'
 # Application definition
 
 INSTALLED_APPS = [
+    'streams.apps.StreamsConfig'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
