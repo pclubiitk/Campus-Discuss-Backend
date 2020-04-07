@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'comments.apps.CommentsConfig',
     'streams.apps.StreamsConfig',
+    'bookmark.apps.BookmarkConfig',
 ]
 
 MIDDLEWARE = [
