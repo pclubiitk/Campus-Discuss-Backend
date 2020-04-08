@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-#from streams.models import stream
+from streams.models import Stream
 #from duties.models import duty
-#from posts.models import post
+from posts.models import Post
+from bookmark.models import Bookmark
 
 class User(models.Model):
     roll = models.CharField(max_length=20, unique=True)
@@ -10,11 +11,11 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     fblink = models.URLField(max_length=300)
-    #posts = models.ManyToManyField(post)
-    #streams = models.ManyToManyField(stream)
-    #moderating = models.ManyToManyField(stream, through='duty', blank=True)
-    #bookmarks = models.ManyToManyField(bookmark)
-    #following = ArrayField(models.IntegerField())
+    posts = models.ManyToManyField(Post)
+    streams = models.ManyToManyField(Stream)
+    #moderating = models.ManyToManyField(Stream, through='duty', blank=True)
+    bookmarks = models.ManyToManyField(Bookmark)
+    following = ArrayField(models.IntegerField())
 
     def __str__(self):
         return self.name
