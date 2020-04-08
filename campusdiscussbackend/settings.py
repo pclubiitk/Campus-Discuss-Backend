@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
-    'comments.apps.CommentsConfig'
+    'comments.apps.CommentsConfig',
+    'streams.apps.StreamsConfig',
 ]
 
 MIDDLEWARE = [
