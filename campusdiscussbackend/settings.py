@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'users.apps.UsersConfig',
     'comments.apps.CommentsConfig',
+    'streams.apps.StreamsConfig',
     'duties.apps.DutiesConfig'
 ]
 
