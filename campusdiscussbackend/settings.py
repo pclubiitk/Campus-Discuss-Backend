@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
     'comments.apps.CommentsConfig'
 ]
