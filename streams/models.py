@@ -6,12 +6,9 @@ from posts.models import Post
 class Stream(models.Model):
     title = models.CharField(max_length = 50)
     description = models.CharField(max_length = 1000)
+
     posts = models.ManyToManyField(Post, blank = True)
     followed_by = models.ManyToManyField(User, blank = True)
 
     def __str__(self):
         return self.title
-
-
-
-
