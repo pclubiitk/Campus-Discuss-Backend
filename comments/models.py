@@ -1,6 +1,4 @@
 from django.db import models
-#from users.models import User
-#from posts.models import Post
 
 class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.DO_NOTHING)

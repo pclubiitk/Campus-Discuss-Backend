@@ -3,9 +3,6 @@ from django.contrib.postgres.fields import ArrayField
 from streams.models import Stream
 from duties.models import Duty
 from posts.models import Post
-#from posts.models import post
-#from duties.models import duty
-from posts.models import Post
 from bookmark.models import Bookmark
 
 class User(models.Model):
@@ -17,7 +14,7 @@ class User(models.Model):
     posts = models.ManyToManyField(Post,null=True,blank=True)
     streams = models.ManyToManyField(Stream,through='duties.Duty',blank=True, null=True)
     following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
-    bookmarks = models.ManyToManyField(Bookmark)
+    bookmarks = models.ManyToManyField(Bookmark,blank=True, null=True)
     def __str__(self):
         return self.name
 

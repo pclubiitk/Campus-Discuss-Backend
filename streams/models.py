@@ -1,9 +1,6 @@
 from django.db import models
-#from users.models import User
 from posts.models import Post
 from duties.models import Duty
-from users.models import User
-# Create your models here.
 
 class Stream(models.Model):
     title = models.CharField(max_length = 50)
