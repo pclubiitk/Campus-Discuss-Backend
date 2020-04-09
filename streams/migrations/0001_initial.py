@@ -8,16 +8,17 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('posts', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Post',
+            name='Stream',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('post_text', models.CharField(max_length=5000)),
-                ('post_title', models.CharField(max_length=100)),
-                ('pub_date', models.DateTimeField(verbose_name='date field')),
+                ('title', models.CharField(max_length=50)),
+                ('description', models.CharField(max_length=1000)),
+                ('posts', models.ManyToManyField(blank=True, to='posts.Post')),
             ],
         ),
     ]

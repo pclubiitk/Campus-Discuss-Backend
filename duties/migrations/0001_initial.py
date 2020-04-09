@@ -12,12 +12,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Post',
+            name='Duty',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('post_text', models.CharField(max_length=5000)),
-                ('post_title', models.CharField(max_length=100)),
-                ('pub_date', models.DateTimeField(verbose_name='date field')),
             ],
         ),
     ]

@@ -10,12 +10,12 @@ class User(models.Model):
     username = models.CharField(max_length=20)
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
-    fblink = models.URLField(max_length=300)
-    posts = models.ManyToManyField(Post)
-    #streams = models.ManyToManyField(Stream)
+    fblink = models.URLField(max_length=300,blank=True, null=True)
+    posts = models.ManyToManyField(Post,null=True,blank=True)
+    streams = models.ManyToManyField(Stream,through='duties.Duty',blank=True, null=True)
     #bookmarks = models.ManyToManyField(bookmark)
-    #following = ArrayField(models.IntegerField())
-
+    following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
+    
     def __str__(self):
         return self.name
 
