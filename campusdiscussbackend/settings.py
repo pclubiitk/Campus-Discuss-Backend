@@ -50,11 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
     'comments.apps.CommentsConfig',
+    'duties.apps.DutiesConfig',
     'streams.apps.StreamsConfig',
-    'bookmark.apps.BookmarkConfig',
+    'posts.apps.PostsConfig',
+    'bookmark.apps.BookmarkConfig'
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,7 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
