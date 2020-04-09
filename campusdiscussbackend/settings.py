@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'comments.apps.CommentsConfig',
     'duties.apps.DutiesConfig',
     'streams.apps.StreamsConfig',
-    'posts.apps.PostsConfig'
+    'posts.apps.PostsConfig',
+    'bookmark.apps.BookmarkConfig'
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,7 @@ WSGI_APPLICATION = 'campusdiscussbackend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "campus3",
+        "NAME": "campus4",
         "USER": "vikrant",
         "PASSWORD": get_secret("DB_PASSWORD"),
         'HOST': 'localhost',

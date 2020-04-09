@@ -4,6 +4,9 @@ from streams.models import Stream
 from duties.models import Duty
 from posts.models import Post
 #from posts.models import post
+#from duties.models import duty
+from posts.models import Post
+from bookmark.models import Bookmark
 
 class User(models.Model):
     roll = models.CharField(max_length=20, unique=True)
@@ -13,9 +16,8 @@ class User(models.Model):
     fblink = models.URLField(max_length=300,blank=True, null=True)
     posts = models.ManyToManyField(Post,null=True,blank=True)
     streams = models.ManyToManyField(Stream,through='duties.Duty',blank=True, null=True)
-    #bookmarks = models.ManyToManyField(bookmark)
     following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
-    
+    bookmarks = models.ManyToManyField(Bookmark)
     def __str__(self):
         return self.name
 
