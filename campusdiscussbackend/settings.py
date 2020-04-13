@@ -42,7 +42,15 @@ ALLOWED_HOSTS = '*'
 
 # Application definition
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'HOST.COM'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 5432
+EMAIL_HOST_USER = 'EMAIL'
+EMAIL_HOST_PASSWORD = 'PASSWORD'
+
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +64,17 @@ INSTALLED_APPS = [
     'streams.apps.StreamsConfig',
     'posts.apps.PostsConfig',
     'bookmark.apps.BookmarkConfig'
+]
+
+# WARNING: Do not remove this, this is for including the Bcrypt Python Library
+#          to hash the password.
+
+PASSWORD_HASHERS = [
+    'users.hashers.BcryptHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
 ]
 
 MIDDLEWARE = [
