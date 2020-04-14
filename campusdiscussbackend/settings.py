@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+from .settings_email import *
 import os
 import yaml
 from django.core.exceptions import ImproperlyConfigured
@@ -41,13 +41,6 @@ ALLOWED_HOSTS = '*'
 
 
 # Application definition
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'HOST.COM'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 5432
-EMAIL_HOST_USER = 'EMAIL'
-EMAIL_HOST_PASSWORD = 'PASSWORD'
 
 INSTALLED_APPS = [
     'rest_framework',
@@ -120,7 +113,6 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
