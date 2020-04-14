@@ -38,10 +38,9 @@ payload1 = {
     'numtxt': '',
     'sbm': ['Y'] * 12
 }
-TOTAL = 8385
+TOTAL = 10218
 r = s.post("https://oa.cc.iitk.ac.in/Oa/Jsp/OAServices/IITk_SrchStudRoll_new.jsp", headers=headers, data=payload)
 soup = BeautifulSoup(r.text, 'html.parser')
-#print(soup.prettify())
 class Job(DailyJob):
 
     def process_response_soup(self,soup, c):
@@ -50,7 +49,6 @@ class Job(DailyJob):
             payload1['numtxt'] = roll
             r1 = s.post("https://oa.cc.iitk.ac.in/Oa/Jsp/OAServices/IITk_SrchRes_new.jsp", headers=headers1, data=payload1)
             soup1 = BeautifulSoup(r1.text, 'html.parser')
-            #print(soup1.prettify())
 
 
 
@@ -129,4 +127,3 @@ class Job(DailyJob):
 
 x = Job()
 x.execute(soup,c)
-#x.process_response_soup(soup,c)
