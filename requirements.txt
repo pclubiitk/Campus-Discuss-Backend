@@ -3,3 +3,6 @@ djangorestframework
 psycopg2-binary
 django-extensions
 pyyaml
+djangorestframework
+django-rest-auth
+bcrypt
