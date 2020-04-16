@@ -15,6 +15,10 @@ class User(models.Model):
     streams = models.ManyToManyField(Stream,through='duties.Duty',blank=True, null=True)
     following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
     bookmarks = models.ManyToManyField(Bookmark,blank=True, null=True)
+    password=models.CharField(max_length=70,null=True)
+    activated=models.BooleanField(blank=True, null=True)
+    activation_hash=models.CharField(max_length=70,null=True)
+
     def __str__(self):
         return self.name
 

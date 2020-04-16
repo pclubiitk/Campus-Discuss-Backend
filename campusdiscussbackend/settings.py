@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'duties.apps.DutiesConfig',
     'streams.apps.StreamsConfig',
     'posts.apps.PostsConfig',
-    'bookmark.apps.BookmarkConfig'
+    'bookmark.apps.BookmarkConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -95,7 +96,7 @@ WSGI_APPLICATION = 'campusdiscussbackend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
+        "NAME": "campus5",
         "USER": "vikrant",
         "PASSWORD": get_secret("DB_PASSWORD"),
         'HOST': 'localhost',
@@ -140,3 +141,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK={
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthenctication'
+    ],
+}
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
+]
