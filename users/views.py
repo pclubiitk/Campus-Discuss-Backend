@@ -52,16 +52,19 @@ class LogoutView(APIView):
 
 def ActivationMailer(request): 
     if request.method == "POST":
-        roll_no = JSONParser().parse(request)
-        user_data = User.objects.get(roll = roll_no['roll'])
-        sender = EMAIL_HOST_USER
-        recipient = user_data.email
-        name = user_data.name
-        user_code = user_data.generate_verification_code()
-        user_link = ACTIVATION_LINK.format(code = user_code)
-        subject = ACTIVATION_SUBJECT
-        body = ACTIVATION_BODY.format(name=name, link=user_link)
-        send_mail(subject, body, sender, [recipient], fail_silently=False)
-        return redirect(ACTIVATION_REDIRECT)
+        try:
+            roll_no = JSONParser().parse(request)
+            user_data = User.objects.get(roll = roll_no['roll'])
+            sender = EMAIL_HOST_USER
+            recipient = user_data.email
+            name = user_data.name
+            user_code = user_data.generate_verification_code()
+            user_link = ACTIVATION_LINK.format(code = user_code)
+            subject = ACTIVATION_SUBJECT
+            body = ACTIVATION_BODY.format(name=name, link=user_link)
+            send_mail(subject, body, sender, [recipient], fail_silently=False)
+            return redirect(ACTIVATION_REDIRECT)
+        except:
+            return HttpResponse("Please set up email host details!", status=206)
     else :
         return HttpResponse("Invalid request!", status=400)
