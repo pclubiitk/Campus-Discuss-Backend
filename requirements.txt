@@ -6,3 +6,6 @@ pyyaml
 djangorestframework
 django-rest-auth
 bcrypt
+secrets
+random
+string
