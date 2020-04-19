@@ -1,9 +1,8 @@
+import string
+import random
+import secrets
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from streams.models import Stream
-from duties.models import Duty
-from posts.models import Post
-from bookmark.models import Bookmark
 
 class User(models.Model):
     roll = models.CharField(max_length=20, unique=True)
@@ -11,13 +10,17 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     fblink = models.URLField(max_length=300,blank=True, null=True)
-    posts = models.ManyToManyField(Post,null=True,blank=True)
-    streams = models.ManyToManyField(Stream,through='duties.Duty',blank=True, null=True)
     following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
-    bookmarks = models.ManyToManyField(Bookmark,blank=True, null=True)
     password = models.CharField(max_length=70, null=True)
     activated = models.BooleanField(blank=True, null=True)
-    activation_hash = models.CharField(max_length=70, blank=True, null=True)
+    verification_code = models.CharField(max_length=70, blank=True, null=True)
+
+    def generate_verification_code(self):
+        # Generates verification code of length 28 made of digits and uppercase letters
+        generated = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for i in range(28))
+        self.verification_code = generated
+        self.save()
+        return self.verification_code
+
     def __str__(self):
         return self.name
-

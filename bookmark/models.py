@@ -1,11 +1,12 @@
 from django.db import models
 import datetime
 from posts.models import Post
+from users.models import User
 
 class Bookmark(models.Model):
 
     date_created = models.DateField(auto_now_add=True)
-    #user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     post = models.OneToOneField(Post, on_delete=models.CASCADE,blank=True, null=True)
 
 
