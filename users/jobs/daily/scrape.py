@@ -106,7 +106,7 @@ class Job(DailyJob):
             match = pattern.match(substituted)
             TOTAL = int(match.group(1))
             print("Total: {}".format(TOTAL))
-            conn.close()
+            #conn.close()
         self.process_response_soup(soup, c)
 
 
