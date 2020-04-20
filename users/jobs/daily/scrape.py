@@ -4,7 +4,7 @@ import requests
 import psycopg2
 from django_extensions.management.jobs import DailyJob
 
-conn = psycopg2.connect(host="localhost", database="postgres",user="vikrant",password="password")
+conn = psycopg2.connect(host="localhost", database="campus6",user="vikrant",password="password")
 c = conn.cursor()
 s = requests.Session()
 s.get("https://oa.cc.iitk.ac.in/Oa/Jsp/Main_Frameset.jsp")
@@ -106,7 +106,7 @@ class Job(DailyJob):
             match = pattern.match(substituted)
             TOTAL = int(match.group(1))
             print("Total: {}".format(TOTAL))
-            conn.close()
+            #conn.close()
         self.process_response_soup(soup, c)
 
 

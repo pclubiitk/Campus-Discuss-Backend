@@ -11,8 +11,8 @@ class User(models.Model):
     email = models.CharField(max_length=100)
     fblink = models.URLField(max_length=300,blank=True, null=True)
     following =models.ManyToManyField("self",symmetrical=False,blank=True, null=True) 
-    password = models.CharField(max_length=70, null=True)
-    activated = models.BooleanField(blank=True, null=True)
+    password = models.CharField(max_length=70, null=True,blank=True)
+    activated = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=70, blank=True, null=True)
 
     def generate_verification_code(self):

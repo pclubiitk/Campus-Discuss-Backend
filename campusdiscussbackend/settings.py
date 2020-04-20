@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'campusdiscussbackend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "campus5",
+        "NAME": "campus6",
         "USER": "vikrant",
         "PASSWORD": get_secret("DB_PASSWORD"),
         'HOST': 'localhost',
@@ -163,7 +163,7 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK={
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthenctication'
+        'rest_framework.authentication.SessionAuthentication'
     ],
 }
 
@@ -176,3 +176,4 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.MD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 ]
+#APPEND_SLASH=False
