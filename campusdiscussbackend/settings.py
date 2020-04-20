@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'campusdiscussbackend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "campus6",
+        "NAME": "postgres",
         "USER": "vikrant",
         "PASSWORD": get_secret("DB_PASSWORD"),
         'HOST': 'localhost',

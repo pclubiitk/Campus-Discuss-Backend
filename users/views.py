@@ -205,3 +205,6 @@ def ResetPassword(request,token):
             return Response(response,status=status.HTTP_401_UNAUTHORIZED)
     else:
         return HttpResponse("Invalid Request",status=400)
+
+
+        

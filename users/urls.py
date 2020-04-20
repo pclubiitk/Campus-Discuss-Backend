@@ -10,3 +10,4 @@ urlpatterns = [
     path('resetpassemail/',ResetPasswordEmail,name="resetpass_email"),
     path('resetpass/code=<str:token>/',ResetPassword,name="resetpass")
 ]
+
