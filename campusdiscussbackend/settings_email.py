@@ -19,4 +19,4 @@ ACTIVATION_BODY = ["""Hi {name:s}!
                      
                 ]
 ACTIVATION_REDIRECT = ["http://127.0.0.1:8000/","/"]
-ACTIVATION_LINK = ["http://127.0.0.1:8000/users/verify/code={code:s}/","http://127.0.0.1:8000/users/resetpassemail/code={code:s}/"]
+ACTIVATION_LINK = ["http://127.0.0.1:8000/users/verify/code={code:s}/","http://127.0.0.1:8000/users/resetpass/code={code:s}/"]

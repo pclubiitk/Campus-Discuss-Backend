@@ -61,9 +61,7 @@ def ActivationMailer(request):
     if request.method == "POST":
         try:
             roll_no = JSONParser().parse(request)
-            #print(roll_no)
             user_data = User.objects.get(roll = roll_no['roll'])
-            #print(user_data.name)
             sender = EMAIL_HOST_USER
             recipient = user_data.email
             name = user_data.name
@@ -73,7 +71,6 @@ def ActivationMailer(request):
             body = ACTIVATION_BODY[0].format(name=name, link=user_link)
             send_mail(subject, body, sender, [recipient], fail_silently=False)
             return redirect(ACTIVATION_REDIRECT[0])
-            #return Response(status=status.HTTP_200_OK)
         except:
             return HttpResponse("Please set up email host details!", status=206)
     else :
@@ -98,7 +95,7 @@ def SetPasswordAndActivate(request,token):
             user_data=User.objects.get(verification_code=token)
             if user_data.activated==False:
                 user_data.activated=True
-                user_data.password=HashPass(pw)
+                user_data.password=HashPass(pw).decode()
                 user_data.save()
                 response={
                     'status':'success',
@@ -123,3 +120,88 @@ def SetPasswordAndActivate(request,token):
 
 
 
+
+@csrf_exempt
+def ResetPasswordEmail(request):
+    if request.method == "POST":
+        try:
+            roll_no = JSONParser().parse(request)
+            user_data = User.objects.get(roll = roll_no['roll'])
+            sender = EMAIL_HOST_USER
+            recipient = user_data.email
+            name = user_data.name
+            user_code = user_data.generate_verification_code()
+            user_link = ACTIVATION_LINK[1].format(code = user_code)
+            subject = ACTIVATION_SUBJECT[1]
+            body = ACTIVATION_BODY[1].format(name=name, link=user_link)
+            send_mail(subject, body, sender, [recipient], fail_silently=False)
+            return redirect(ACTIVATION_REDIRECT[1])
+        except:
+            return HttpResponse("Please set up email host details!", status=206)
+    else :
+        return HttpResponse("Invalid request!", status=400)
+
+
+
+def pass_checker(old,password):
+    return bcrypt.checkpw(old.encode(),password)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def ResetPassword(request,token):
+    if request.method == "POST":
+        try:
+            new1=request.data['new_password1']
+            new2=request.data['new_password2']
+            old=request.data['old_password']
+            user_data=User.objects.get(verification_code=token)
+            password=(user_data.password)
+            print(type(password),"\n",password)
+            password=password.encode()
+            print(type(password),"\n",password)
+
+            print(pass_checker(old,password))
+            if user_data.activated==True:
+                if(new1==new2):
+                    print("yo\n")
+                    print(pass_checker(old,password))
+                    if(pass_checker(old,password)==True):
+                        print("yo")
+                        print(user_data.password)
+                        user_data.password=HashPass(new1).decode()
+                        user_data.save()
+                        response={
+                            'status':'success',
+                            'code':status.HTTP_200_OK,
+                            'message':'Password reset succesfull and now you can login',
+                        }
+                        return Response(response)
+                    else:
+                        response={
+                            'status':'failure',
+                            'code':status.HTTP_401_UNAUTHORIZED,
+                            'message':'wrong old password',
+                        }
+                        return Response(response)
+                else:
+                    response={
+                        'status':'failure',
+                        'code':401,
+                        'message':"the retyped password doesn't match",
+                    }
+                    return Response(response)
+
+            else:
+                response={
+                'code':'status.HTTP_401_UNAUTHORIZED',
+                'message':'Unauthorised user or Account not activated'}
+                return Response(response,status=401)  
+        except:
+            response={
+                    'code':'status.HTTP_401_UNAUTHORIZED',
+                    'message':'Invalid token or invalid request'
+                }
+            return Response(response,status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return HttpResponse("Invalid Request",status=400)
