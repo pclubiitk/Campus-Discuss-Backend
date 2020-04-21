@@ -3,7 +3,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
-from .utils import IsLoggedIn
+from .utils import *
 from django.contrib.auth.hashers import check_password
 from rest_framework.parsers import JSONParser
 from campusdiscussbackend.settings_email import *
@@ -16,6 +16,20 @@ from campusdiscussbackend.settings_email import *
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 #@csrf_exempt
+
+class RegistrationView(APIView):
+
+    def post(self, request):
+        if IsRegistered(request) is False:
+            ActivationMailer(request)
+            return Response(status = status.HTTP_202_ACCEPTED)
+        if IsRegistered(request) is True:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        if IsRegistered(request) is None:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        return Response(status = status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
 
@@ -58,33 +72,27 @@ class LogoutView(APIView):
 def ActivationMailer(request): 
     if request.method == "POST":
         try:
-            roll_no = JSONParser().parse(request)
-            user_data = User.objects.get(roll = roll_no['roll'])
+            roll_no = request.data['roll']
+            user_data = User.objects.get(roll = roll_no)
             sender = EMAIL_HOST_USER
             recipient = user_data.email
             name = user_data.name
             user_code = user_data.generate_verification_code()
-            user_link = ACTIVATION_LINK[0].format(code = user_code)
-            subject = ACTIVATION_SUBJECT[0]
-            body = ACTIVATION_BODY[0].format(name=name, link=user_link)
+            user_link = EMAIL_LINK["Activation"].format(code = user_code)
+            subject = EMAIL_SUBJECT["Activation"]
+            body = EMAIL_BODY["Activation"].format(name=name, link=user_link)
             send_mail(subject, body, sender, [recipient], fail_silently=False)
-            return redirect(ACTIVATION_REDIRECT[0])
+            return redirect(REDIRECT_LINK["Activation"])
         except:
             return HttpResponse("Please set up email host details!", status=206)
     else :
         return HttpResponse("Invalid request!", status=400)
 
-
-
-
 def HashPass(password):
     password=password.encode()
     return bcrypt.hashpw(password,bcrypt.gensalt())
 
-
-
-
-@csrf_exempt
+# @csrf_exempt
 @api_view(['POST'])
 def SetPasswordAndActivate(request,token):
     if request.method == "POST":
@@ -116,33 +124,30 @@ def SetPasswordAndActivate(request,token):
         return HttpResponse("Invalid Request",status=400)
 
 
-@csrf_exempt
+# @csrf_exempt
 def ResetPasswordEmail(request):
     if request.method == "POST":
         try:
-            roll_no = JSONParser().parse(request)
-            user_data = User.objects.get(roll = roll_no['roll'])
+            roll_no = request.data['roll']
+            user_data = User.objects.get(roll = roll_no)
             sender = EMAIL_HOST_USER
             recipient = user_data.email
             name = user_data.name
             user_code = user_data.generate_verification_code()
-            user_link = ACTIVATION_LINK[1].format(code = user_code)
-            subject = ACTIVATION_SUBJECT[1]
-            body = ACTIVATION_BODY[1].format(name=name, link=user_link)
+            user_link = EMAIL_LINK["PasswordReset"].format(code = user_code)
+            subject = EMAIL_SUBJECT["PasswordReset"]
+            body = EMAIL_BODY["PasswordReset"].format(name=name, link=user_link)
             send_mail(subject, body, sender, [recipient], fail_silently=False)
-            return redirect(ACTIVATION_REDIRECT[1])
+            return redirect(REDIRECT_LINK["PasswordReset"])
         except:
             return HttpResponse("Please set up email host details!", status=206)
     else :
         return HttpResponse("Invalid request!", status=400)
 
-
-
 def pass_checker(old,password):
     return bcrypt.checkpw(old.encode(),password)
 
-
-@csrf_exempt
+# @csrf_exempt
 @api_view(['POST'])
 def ResetPassword(request,token):
     if request.method == "POST":
