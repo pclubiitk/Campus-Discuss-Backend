@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include('users.urls')),
     url(r'^posts/',include('posts.urls')),
+    url(r'^streams/',include('streams.urls')),
 ]
