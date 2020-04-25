@@ -12,7 +12,6 @@ from django.http import HttpResponse,JsonResponse
 from django.core.mail import *
 from django.views.decorators.csrf import csrf_exempt
 import bcrypt
-from campusdiscussbackend.settings_email import *
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 #@csrf_exempt
@@ -46,9 +45,9 @@ class LoginView(APIView):
             user = User.objects.get(username = username, activated = True)
             if user is not None:
                 if bcrypt.checkpw(password.encode(), user.password.encode()):
-                        request.session["username"] = username 
-                        request.session.modified = True                     
-                        return Response(status = status.HTTP_200_OK)
+                    request.session["username"] = username 
+                    request.session.modified = True
+                    return Response(status = status.HTTP_200_OK)
                 else:
                     return Response(status = status.HTTP_401_UNAUTHORIZED)
             
@@ -68,6 +67,30 @@ class LogoutView(APIView):
             return Response(status = status.HTTP_200_OK)
         return Response(status = status.HTTP_401_UNAUTHORIZED)
 
+class FollowUserView(APIView):
+
+    def put(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            username = request.data.get("username", "")
+            if username == request.session["username"]:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+            try:
+                follow_user = User.objects.get(username=username)
+                if follow_user is not None:
+                    user.following.add(follow_user)
+                    user.save()
+                    follow_user.save()
+                    return Response(status = status.HTTP_200_OK)
+
+                else:
+                    return Response(status = status.HTTP_400_BAD_REQUEST)
+            
+            except:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+        
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 def ActivationMailer(request): 
     if request.method == "POST":
@@ -197,5 +220,3 @@ def ResetPassword(request,token):
             return Response(response,status=status.HTTP_401_UNAUTHORIZED)
     else:
         return HttpResponse("Invalid Request",status=400) 
-
-
