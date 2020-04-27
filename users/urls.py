@@ -9,5 +9,5 @@ urlpatterns = [
     path('register/',RegistrationView.as_view(),name="registration"),
     path('resetpassemail/',ResetPasswordEmail,name="resetpass_email"),
     path('resetpass/code=<str:token>/',ResetPassword,name="resetpass"),
+    path('follow/', FollowUserView.as_view(), name="follow-user"),
 ]
-

@@ -8,4 +8,10 @@ url: /streams/follow/
 method: PUT
 parameters = {"title" : "<title of the stream to be followed>"}
 ```
-
+#### Follow User
+To follow another user.
+```
+/users/follow/
+method = PUT
+parameters = {"username" : "<username of the user to be followed>"}
+```
