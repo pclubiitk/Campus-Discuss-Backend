@@ -6,10 +6,10 @@ from django.contrib.postgres.fields import ArrayField
 
 class User(models.Model):
     roll = models.CharField(max_length=20, unique=True)
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    fblink = models.URLField(max_length=300, blank=True, null=True)
+    email = models.CharField(max_length=100, unique=True)
+    fblink = models.URLField(max_length=300, unique=True, blank=True, null=True)
     following = models.ManyToManyField("self", symmetrical=False, blank=True) 
     password = models.CharField(max_length=70, null=True, blank=True)
     activated = models.BooleanField(default=False)

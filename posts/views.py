@@ -12,26 +12,39 @@ import bcrypt
 from rest_framework.decorators import api_view, renderer_classes
 from .models import Post
 from rest_framework.views import APIView
-#@csrf_exempt
 
-@csrf_exempt
-@api_view(['POST'])
-def CreatePost(request):
-    if request.method=="POST":
+class CreatePostView(APIView):
+
+    def post(self, request):
         try:
-            user=IsLoggedIn(request)
+            user = IsLoggedIn(request)
             if user is None:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
-            post_text=request.data['post_text']
-            post_title=request.data['post_title']
-            Post.objects.create(post_title=post_title,post_text=post_text,author=user)
-            response={
-                    'status':'success',
-                    'code':status.HTTP_201_CREATED,
-                    'message':'post created succesfully',
-                    }
-            return Response(response)
+            post_text = request.data.get("text", "")
+            post_title = request.data.get("title", "")
+            Post.objects.create(post_title=post_title, post_text=post_text, author=user)
+            return Response(status=status.HTTP_201_CREATED)
         except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)    
-    else:
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class DeletePostView(APIView):
+
+    def delete(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            try:
+                pk = request.data.get("pk", "")
+                post = Post.objects.get(pk=pk)
+                if post is not None:
+                    author = post.author
+                    if author == user :
+                        post.delete()
+                        return Response(status=status.HTTP_204_NO_CONTENT)
+                    else:
+                        return Response(status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    return Response(status = status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
