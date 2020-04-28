@@ -11,27 +11,25 @@ from django.views.decorators.csrf import csrf_exempt
 import bcrypt
 from rest_framework.decorators import api_view, renderer_classes
 from .models import Post
+from streams.models import Stream
 from rest_framework.views import APIView
 #@csrf_exempt
 
-@csrf_exempt
-@api_view(['POST'])
-def CreatePost(request):
-    if request.method=="POST":
+class CreatePostView(APIView):
+    
+    def post(self, request):
         try:
             user=IsLoggedIn(request)
             if user is None:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
             post_text=request.data['post_text']
             post_title=request.data['post_title']
-            Post.objects.create(post_title=post_title,post_text=post_text,author=user)
-            response={
-                    'status':'success',
-                    'code':status.HTTP_201_CREATED,
-                    'message':'post created succesfully',
-                    }
-            return Response(response)
+            stream_title=request.data['stream_title']
+            try:
+                stream = Stream.objects.get(title=stream_title)    
+                Post.objects.create(post_title=post_title,post_text=post_text,author=user,stream=stream)
+                return Response(status=status.HTTP_201_CREATED)
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)    
-    else:
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

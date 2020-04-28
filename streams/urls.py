@@ -3,4 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('follow/', FollowStreamView.as_view(), name="follow_stream"),
+    path('<int:pk>/posts/', PostsByStreamView.as_view(), name="posts_by_stream"),
 ]

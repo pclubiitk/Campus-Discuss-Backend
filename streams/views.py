@@ -11,6 +11,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Stream
 from users.models import User
+from .serializers import StreamSerializer, PostByStreamSerializer
 
 class FollowStreamView(APIView):
     
@@ -31,4 +32,17 @@ class FollowStreamView(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_401_UNAUTHORIZED) 
 
+ 
+class PostsByStreamView(APIView):
 
+    def get(self,request,pk):
+        user = IsLoggedIn(request)
+        if user is not None:
+            try:
+                stream = Stream.objects.get(pk=pk)
+                serializer = PostByStreamSerializer(stream)
+                return Response(serializer.data)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
