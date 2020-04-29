@@ -10,6 +10,17 @@ method : PUT
 parameters = {"username" : "<username of the user to be followed>"}
 ```
 ### Posts
+#### Create Post
+To create a new post
+```
+url : /posts/create/
+method : POST
+parameters = {
+    "title" : "<title of the post to be created>"
+    "text" : "<contents of the post>"
+    "stream" : "<title of the stream under which this post comes>"
+}
+```
 #### Delete Post
 Allows deletion of a post by its author.
 ```
@@ -24,4 +35,10 @@ To follow a stream.
 url : /streams/follow/
 method : PUT
 parameters = {"title" : "<title of the stream to be followed>"}
+```
+#### Fetch Posts by Stream
+To display posts corresponding to a stream
+```
+url : /streams/<int:pk>/posts/
+method : GET
 ```
