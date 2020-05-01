@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^users/', include('users.urls')),
     url(r'^posts/',include('posts.urls')),
     url(r'^streams/', include('streams.urls')),
+    url(r'^bookmarks/', include('bookmark.urls')),
+    url(r'^comments/', include('comments.urls')),
 ]
