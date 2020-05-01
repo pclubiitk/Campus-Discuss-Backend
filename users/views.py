@@ -73,7 +73,7 @@ class FollowUserView(APIView):
         user = IsLoggedIn(request)
         if user is not None:
             username = request.data.get("username", "")
-            if username == request.session["username"]:
+            if username == request.session["username"] or IsFollowing(request.session["username"], username):
                 return Response(status = status.HTTP_400_BAD_REQUEST)
             try:
                 follow_user = User.objects.get(username=username)
@@ -89,6 +89,27 @@ class FollowUserView(APIView):
             except:
                 return Response(status = status.HTTP_400_BAD_REQUEST)
         
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class UnfollowUserView(APIView):
+
+    def delete(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            username = request.data.get("username", "")
+            try:
+                if IsFollowing(request.session["username"], username):
+                    unfollow_user = user.following.get(username=username)
+                    user.following.remove(unfollow_user)
+                    return Response(status = status.HTTP_200_OK)
+                    
+                else:
+                    return Response(status = status.HTTP_400_BAD_REQUEST)
+
+            except:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 

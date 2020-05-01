@@ -19,3 +19,14 @@ def IsRegistered(request):
         return data.activated
     except:
         return None
+
+def IsFollowing(username, follow_username):
+    user = User.objects.get(username=username)
+    try:
+        follow_user = user.following.get(username=follow_username)
+    except:
+        follow_user = None
+    if follow_user is not None:
+        return True
+    else:
+        return False

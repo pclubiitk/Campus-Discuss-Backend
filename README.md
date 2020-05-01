@@ -9,6 +9,13 @@ url : /users/follow/
 method : PUT
 parameters = {"username" : "<username of the user to be followed>"}
 ```
+#### Unfollow User
+To unfollow a user who is already followed.
+```
+url : /users/unfollow/
+method : DELETE
+parameters = {"username" : "<username of the user to be unfollowed">}
+```
 ### Posts
 #### Create Post
 To create a new post
