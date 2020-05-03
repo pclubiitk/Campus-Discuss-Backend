@@ -16,6 +16,12 @@ url : /users/unfollow/
 method : DELETE
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
+#### Fetch Feed Posts
+To see posts from followed users and streams
+```
+url : /users/feed/
+method : GET
+```
 ### Posts
 #### Create Post
 To create a new post
