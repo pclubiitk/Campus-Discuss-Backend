@@ -11,5 +11,6 @@ urlpatterns = [
     path('resetpass/code=<str:token>/',ResetPassword,name="resetpass"),
     path('follow/', FollowUserView.as_view(), name="follow-user"),
     path('unfollow/', UnfollowUserView.as_view(), name="follow-user"),
+    path('feed/', UserFeedView.as_view(), name='fetch_feed'),
     path('<int:pk>/posts/', PostsByAuthorView.as_view(), name="posts_by _author"),
 ]

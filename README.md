@@ -16,6 +16,14 @@ url : /users/unfollow/
 method : DELETE
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
+
+#### Fetch Feed Posts
+To see posts from followed users and streams
+```
+url : /users/feed/
+method : GET
+```
+
 #### Fetch Posts by User
 To display posts corresponding to a user
 ```
@@ -42,7 +50,7 @@ url : /posts/delete/
 method : DELETE
 parameters = {"pk" : "<primary key of the post>}
 ```
-####View Post
+#### View Post
 To see a post in detail
 ```
 url:/posts/view/<int:pk>/
@@ -62,7 +70,7 @@ To display posts corresponding to a stream
 url : /streams/<int:pk>/posts/
 method : GET
 ```
-###Bookmark
+### Bookmark
 #### Bookmark/Unbookmark
 To bookmark a post or to unbookmark already existing bookmark
 ```
@@ -70,7 +78,7 @@ url:/bookmarks/create/
 method: POST
 parameters={"pk":"<int:pk>"}
 ```
-###Comment
+### Comment
 #### Create Comment
 To comment on post or sub-comment on a comment
 ```

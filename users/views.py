@@ -3,6 +3,8 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
+from posts.models import Post
+from posts.serializers import PostSerializer
 from .utils import *
 from django.contrib.auth.hashers import check_password
 from rest_framework.parsers import JSONParser
@@ -111,6 +113,24 @@ class UnfollowUserView(APIView):
             except:
                 return Response(status = status.HTTP_400_BAD_REQUEST)
 
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class UserFeedView(APIView):
+
+    def get(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            feed_posts_ids = list()
+            posts = Post.objects.all()
+            for post in posts:
+                if user in post.stream.followed_by.all():
+                    feed_posts_ids.append(post.id)
+                elif post.author in user.following.all():
+                    feed_posts_ids.append(post.id)
+            feed_posts = Post.objects.filter(id__in=feed_posts_ids)
+            serializer = PostSerializer(feed_posts, many=True)
+            return Response(serializer.data)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
