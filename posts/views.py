@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view, renderer_classes
 from .models import Post
 from streams.models import Stream
 from rest_framework.views import APIView
+from .serializers import PostSerializer
 
 class CreatePostView(APIView):
 
@@ -55,3 +56,14 @@ class DeletePostView(APIView):
                 return Response(status = status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class PostDetailView(APIView):
+
+    def get(self,request,pk):
+        post=Post.objects.get(pk=pk)
+        if post is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer=PostSerializer(post)
+        return Response(serializer.data)
+
