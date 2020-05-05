@@ -12,26 +12,42 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Stream
 from users.models import User
 from .serializers import PostByStreamSerializer
+from .utils import IsFollowing
 
 class FollowStreamView(APIView):
     
     def put(self,request):
         user = IsLoggedIn(request)
         if user is not None:
-            request.session["username"] = user.username
             try:
-                stream = Stream.objects.get(title = request.data.get("title"))
-                if stream is not None:
-                    stream.followed_by.add(user)
-                    stream.save()
-                    user.save()
-                    return Response(status=status.HTTP_200_OK)
-                else:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                stream_title = request.data.get("title")
+                stream = Stream.objects.get(title=stream_title)
+                stream.followed_by.add(user)
+                stream.save()
+                return Response(status=status.HTTP_200_OK)
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_401_UNAUTHORIZED) 
 
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED) 
+
+class UnfollowStreamView(APIView):
+
+    def delete(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            try:
+                stream_title = request.data.get("title", "")
+                if IsFollowing(user.username, stream_title) == False:
+                    return Response(status=status.HTTP_404_NOT_FOUND)
+                stream = Stream.objects.get(title=stream_title)
+                stream.followed_by.remove(user)
+                return Response(status=status.HTTP_200_OK)
+
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class PostsByStreamView(APIView):
 
@@ -42,5 +58,3 @@ class PostsByStreamView(APIView):
             return Response(serializer.data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-

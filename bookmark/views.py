@@ -9,25 +9,22 @@ class CreateAndDeleteBookmark(APIView):
     
     def post(self,request):
         try:
-            pk=request.data['pk']
+            pk = request.data['pk']
             try:
-                post=Post.objects.get(pk=pk)
+                post = Post.objects.get(pk=pk)
             except post.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-            user=IsLoggedIn(request)
+            user = IsLoggedIn(request)
             if user is None:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
             
-            bookmark=Bookmark.objects.filter(user=user,post=post)
-            if len(bookmark) is not 0:
+            bookmark = Bookmark.objects.filter(user=user,post=post)
+            if len(bookmark) != 0:
                 bookmark.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             else:
                 Bookmark.objects.create(user=user,post=post)
                 return Response(status=status.HTTP_201_CREATED)
-                
-            
+
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
