@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
 from posts.models import Post
-from posts.serializers import PostSerializer
+from posts.serializers import *
 from .utils import *
 from django.contrib.auth.hashers import check_password
 from rest_framework.parsers import JSONParser
@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 import bcrypt
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-from .serializers import PostByUserSerializer
 #@csrf_exempt
 
 class RegistrationView(APIView):
@@ -263,7 +262,7 @@ def ResetPassword(request,token):
     else:
         return HttpResponse("Invalid Request",status=400) 
 
-class PostsByAuthorView(APIView):
+class PostsByUserView(APIView):
     def get(self,request,pk):
         try:
             user = User.objects.get(pk=pk)
@@ -271,4 +270,3 @@ class PostsByAuthorView(APIView):
             return Response(serializer.data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-

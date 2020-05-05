@@ -13,4 +13,4 @@ class Post(models.Model):
 		ordering = ['-pub_date']
 
 	def __str__(self):
-		return "#"+str(self.pk)+" "+self.post_title
+		return f'#{self.pk}'
