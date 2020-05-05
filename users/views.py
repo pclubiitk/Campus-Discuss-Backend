@@ -79,14 +79,10 @@ class FollowUserView(APIView):
                 return Response(status = status.HTTP_400_BAD_REQUEST)
             try:
                 follow_user = User.objects.get(username=username)
-                if follow_user is not None:
-                    user.following.add(follow_user)
-                    user.save()
-                    follow_user.save()
-                    return Response(status = status.HTTP_200_OK)
-
-                else:
-                    return Response(status = status.HTTP_400_BAD_REQUEST)
+                user.following.add(follow_user)
+                user.save()
+                follow_user.save()
+                return Response(status = status.HTTP_200_OK)
             
             except:
                 return Response(status = status.HTTP_400_BAD_REQUEST)

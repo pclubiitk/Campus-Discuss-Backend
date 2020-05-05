@@ -91,6 +91,13 @@ url : /streams/follow/
 method : PUT
 parameters = {"title" : "<title of the stream to be followed>"}
 ```
+#### Unfollow Stream
+To unfollow a stream.
+```
+url : /streams/unfollow/
+method : DELETE
+parameters = {"title" : "<title of the stream to be unfollowed>"}
+```
 #### Fetch Posts by Stream
 To display posts corresponding to a stream
 ```
