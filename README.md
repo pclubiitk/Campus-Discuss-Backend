@@ -16,6 +16,21 @@ url : /users/unfollow/
 method : DELETE
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
+
+#### Fetch Feed Posts
+To see posts from followed users and streams
+```
+url : /users/feed/
+method : GET
+```
+
+#### Fetch Posts by User
+To display posts corresponding to a user
+```
+url:/users/<int:pk>/posts
+method: GET
+comments:pk in url is the primary key for user
+```
 ### Posts
 #### Create Post
 To create a new post
@@ -35,6 +50,12 @@ url : /posts/delete/
 method : DELETE
 parameters = {"pk" : "<primary key of the post>}
 ```
+#### View Post
+To see a post in detail
+```
+url:/posts/view/<int:pk>/
+method: GET
+```
 ### Streams
 #### Follow Stream
 To follow a stream.
@@ -48,4 +69,32 @@ To display posts corresponding to a stream
 ```
 url : /streams/<int:pk>/posts/
 method : GET
+```
+### Bookmark
+#### Bookmark/Unbookmark
+To bookmark a post or to unbookmark already existing bookmark
+```
+url:/bookmarks/create/
+method: POST
+parameters={"pk":"<int:pk>"}
+```
+### Comment
+#### Create Comment
+To comment on post or sub-comment on a comment
+```
+url:/comments/create/
+method: POST
+parameters={
+    "content":"<content of comment>",
+    "post_id":"<int:pk>"
+}
+```
+#### Delete Comment
+To delete a comment on a post(all sub-comments will be deleted)/delete sub-comments(all of its sub-comments will be deleted).Recursive deletion will be followed
+```
+url:/comments/delete
+method: DELETE
+parameters={
+    "pk":"<int:pk>"
+}
 ```

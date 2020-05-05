@@ -13,3 +13,5 @@ class Bookmark(models.Model):
     def __str__(self):
         return f'Bookmark created at {self.date_created} '
 
+
+
