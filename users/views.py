@@ -17,6 +17,7 @@ import bcrypt
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from .serializers import PostByUserSerializer
+from bookmark.models import Bookmark
 #@csrf_exempt
 
 class RegistrationView(APIView):
@@ -271,4 +272,21 @@ class PostsByAuthorView(APIView):
             return Response(serializer.data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class PostsByBookmarksView(APIView):
+
+    def get(self, request):
+        user=IsLoggedIn(request)
+        if user is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        bookmarks=Bookmark.objects.filter(user=user)
+        posts=list()
+        try:
+            for bookmark in bookmarks:
+                posts.append(bookmark.post)
+            serializer = PostSerializer(posts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
