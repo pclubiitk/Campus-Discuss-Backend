@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from users.utils import IsLoggedIn
+from streams.utils import IsFollowing
 from django.contrib.auth import login, logout
 from rest_framework import permissions, status
 from rest_framework.views import APIView
@@ -25,12 +26,12 @@ class CreatePostView(APIView):
             post_text = request.data.get("text", "")
             post_title = request.data.get("title", "")
             stream_title = request.data.get("stream", "")
-            try:
-                stream = Stream.objects.get(title=stream_title)
-                Post.objects.create(post_title=post_title, post_text=post_text, author=user, stream=stream)
-                return Response(status=status.HTTP_201_CREATED)
-            except:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+            stream = Stream.objects.get(title=stream_title)
+            follow_stream = IsFollowing(request.session["username"], stream_title)
+            if follow_stream == False:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            Post.objects.create(post_title=post_title, post_text=post_text, author=user, stream=stream)
+            return Response(status=status.HTTP_201_CREATED)
         
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -43,15 +44,12 @@ class DeletePostView(APIView):
             try:
                 pk = request.data.get("pk", "")
                 post = Post.objects.get(pk=pk)
-                if post is not None:
-                    author = post.author
-                    if author == user :
-                        post.delete()
-                        return Response(status=status.HTTP_204_NO_CONTENT)
-                    else:
-                        return Response(status=status.HTTP_401_UNAUTHORIZED)
+                author = post.author
+                if author == user:
+                    post.delete()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
                 else:
-                    return Response(status = status.HTTP_400_BAD_REQUEST)
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
             except:
                 return Response(status = status.HTTP_400_BAD_REQUEST)
         else:
@@ -60,10 +58,38 @@ class DeletePostView(APIView):
 
 class PostDetailView(APIView):
 
-    def get(self,request,pk):
-        post=Post.objects.get(pk=pk)
-        if post is None:
+    def get(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer=PostSerializer(post)
-        return Response(serializer.data)
 
+class EditPostView(APIView):
+
+    def put(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            try:
+                pk = request.data.get("pk", "")
+                post = Post.objects.get(pk=pk)
+                author = post.author
+                print(post.pub_date, post.last_modified, sep='\n')
+                if author == user:
+                    post_text = request.data.get("text", "")
+                    post_title = request.data.get("title", "")
+                    post.post_title = post_title
+                    post.post_text = post_text
+                    post.save()
+                    print(post.pub_date, post.last_modified, sep='\n')
+                    return Response(status=status.HTTP_201_CREATED)
+                
+                else:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
