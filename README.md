@@ -31,7 +31,6 @@ url : /users/unfollow/
 method : DELETE
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
-
 #### Fetch Feed Posts
 To see posts from followed users and streams
 ```
@@ -45,6 +44,13 @@ To display posts corresponding to a user
 url : /users/<int:pk>/posts
 method : GET
 comments : pk in url is the primary key for user
+```
+#### Fetch Posts by Bookmarks
+To display posts corresponding to bookmarks of a loggedin user
+```
+url: /users/bookmarks/
+method: GET
+comments: the user must be logged in 
 ```
 ### Posts
 #### Create Post
@@ -133,3 +139,4 @@ parameters = {
     "pk":"<primary key of the comment>"
 }
 ```
+
