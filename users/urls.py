@@ -13,4 +13,5 @@ urlpatterns = [
     path('unfollow/', UnfollowUserView.as_view(), name="follow-user"),
     path('feed/', UserFeedView.as_view(), name='fetch-feed'),
     path('<int:pk>/posts/', PostsByUserView.as_view(), name="posts-by-user"),
+    path('bookmarks/',PostsByBookmarksView.as_view(),name="posts_by_bookmarks")
 ]
