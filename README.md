@@ -74,9 +74,8 @@ parameters = {"pk" : "<primary key of the post>"}
 #### View Post
 To see a post in detail
 ```
-url : /posts/view/
+url : /posts/view/<int:pk>/
 method : GET
-parameters = {"pk" : "<primary key of the post>"}
 ```
 #### Edit Post
 Edit post if user is the author.

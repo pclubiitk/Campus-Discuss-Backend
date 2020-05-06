@@ -58,8 +58,7 @@ class DeletePostView(APIView):
 
 class PostDetailView(APIView):
 
-    def get(self, request):
-        pk = request.data.get("pk", "")
+    def get(self, request, pk):
         try:
             post = Post.objects.get(pk=pk)
             serializer = PostSerializer(post)
