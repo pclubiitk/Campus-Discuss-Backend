@@ -43,4 +43,21 @@ class PostsByStreamView(APIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+class UnfollowStreamView(APIView):
 
+    def get(self,request):
+        user = IsLoggedIn(request)
+        if user is None:
+            return Response(status = status.HTTP_401_UNAUTHORIZED)
+        try:
+            stream = Stream.objects.get(title = request.data.get("title"))
+            if stream is None:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+            for users in stream.followed_by.all():
+                if users==user:    
+                    stream.followed_by.remove(user)
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)            
+        
