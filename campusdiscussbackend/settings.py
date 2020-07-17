@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'streams.apps.StreamsConfig',
     'posts.apps.PostsConfig',
     'bookmark.apps.BookmarkConfig',
+    'tokens.apps.TokensConfig',
     'rest_framework',
 ]
 
@@ -112,6 +113,8 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
+
+EXPO_SERVER="https://server.com"
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
