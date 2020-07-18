@@ -251,3 +251,22 @@ parameters = {
 Successful : 204_NO_CONTENT
 Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED / 404_NOT_FOUND
 ```
+#### Fetch Comments by Post
+View all the comments (and their replies) of a post.
+```
+url: /comments/view/<int:pk>/
+method : GET
+```
+pk = primary key of the post
+```
+Successful : [
+    {
+        "parent",
+        "post",
+        "content",
+        "created_at",
+        "user"
+    },
+]
+Unsuccessful : 404_NOT_FOUND
+```
