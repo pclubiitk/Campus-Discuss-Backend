@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from users.models import User
 from posts.models import Post
 from .models import Comment
+from .serializers import CommentSerializer
 
 class CreateComment(APIView):
 
@@ -39,7 +40,7 @@ def recursiveDelete(comment):
 
 class DeleteComment(APIView):
     
-    def delete(self,request):
+    def delete(self, request):
         try:
             user = IsLoggedIn(request)
             if user is None:
@@ -58,3 +59,17 @@ class DeleteComment(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class ViewComments(APIView):
+
+    def get(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+            comments = Comment.objects.filter(post=post)
+            response = []
+            for comment in comments:
+                serializer = CommentSerializer(comment)
+                response.append(serializer.data)
+            return Response(response)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
