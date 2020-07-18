@@ -53,7 +53,17 @@ To see posts from followed users and streams
 url : /users/feed/
 method : GET
 ```
-
+```
+Successful : {
+                "post_title",
+                "post_text",
+                "pub_date",
+                "last_modified",
+                "author",
+                "stream"
+            }
+Unsuccessful : 401_UNAUTHORIZED
+```
 #### Fetch Posts by User
 To display posts corresponding to a user
 ```
@@ -61,12 +71,39 @@ url : /users/<int:pk>/posts
 method : GET
 comments : pk in url is the primary key for user
 ```
+```
+Successful : {
+                [
+                    {
+                        "post_title",
+                        "post_text",
+                        "pub_date",
+                        "last_modified",
+                        "author",
+                        "stream"
+                    },
+                ],
+                "username"
+            }
+Unsuccessful : 404_NOT_FOUND
+```
 #### Fetch Posts by Bookmarks
 To display posts corresponding to bookmarks of a loggedin user
 ```
 url: /users/bookmarks/
 method: GET
 comments: the user must be logged in 
+```
+```
+Successful : {
+                "post_title",
+                "post_text",
+                "pub_date",
+                "last_modified",
+                "author",
+                "stream"
+            }
+Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 ```
 ### Posts
 #### Create Post
@@ -100,6 +137,17 @@ To see a post in detail
 ```
 url : /posts/view/<int:pk>/
 method : GET
+```
+```
+Successful : {
+                "post_title",
+                "post_text",
+                "pub_date",
+                "last_modified",
+                "author",
+                "stream"
+            }
+Unsuccessful : 404_NOT_FOUND
 ```
 #### Edit Post
 Edit post if user is the author.
@@ -144,6 +192,22 @@ To display posts corresponding to a stream
 ```
 url : /streams/<int:pk>/posts/
 method : GET
+```
+```
+Successful : {
+                "title",
+                [
+                    {
+                        "post_title",
+                        "post_text",
+                        "pub_date",
+                        "last_modified",
+                        "author",
+                        "stream"
+                    },
+                ]
+            }
+Unsuccessful : 404_NOT_FOUND
 ```
 ### Bookmark
 #### Bookmark/Unbookmark
