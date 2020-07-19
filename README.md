@@ -228,6 +228,23 @@ Successful : {
             }
 Unsuccessful : 404_NOT_FOUND
 ```
+#### Fetch Subscribed Streams
+Displays all the streams subscribed by the user.
+```
+url : /streams/subbed/
+method : GET
+```
+```
+Successful : [
+    {
+        "title",
+        "description",
+        "pk"
+    },
+]
+200_OK
+Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
+```
 ### Bookmark
 #### Bookmark/Unbookmark
 To bookmark a post or to unbookmark already existing bookmark

@@ -4,15 +4,12 @@ from posts.serializers import PostSerializer
 from users.serializers import UserSerializer
 
 class StreamSerializer(serializers.ModelSerializer):
-    post_set = PostSerializer(many=True)
-    followed_by = UserSerializer(many=True)
     class Meta:
         model = Stream
         fields = (
             'title',
             'description',
-            'followed_by',
-            'post_set'
+            'pk',
         )
 
 class PostByStreamSerializer(serializers.ModelSerializer):
