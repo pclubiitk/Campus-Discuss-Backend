@@ -8,7 +8,7 @@ url : /users/profile/
 method : GET
 
 Successful : 200_OK
-Unsuccessful : 404_BAD_REQUEST
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
 
 Response : {
             "roll",

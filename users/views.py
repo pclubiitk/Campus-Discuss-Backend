@@ -26,7 +26,7 @@ class UserView(APIView):
         try:
             user = IsLoggedIn(request)
             if user is None:
-                return HttpResponse("User not logged in.",status=400)
+                return HttpResponse("User not logged in.",status=401)
             serializer = UserViewSerializer(user)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
