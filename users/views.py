@@ -23,11 +23,14 @@ from users.serializers import UserViewSerializer
 class UserView(APIView):
 
     def get(self, request):
-        user = IsLoggedIn(request)
-        serializer = UserViewSerializer(user)
-        if user is None:
-            return HttpResponse("User not logged in.",status=400)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        try:
+            user = IsLoggedIn(request)
+            if user is None:
+                return HttpResponse("User not logged in.",status=400)
+            serializer = UserViewSerializer(user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return HttpResponse("Bad Request.",status=400)
 
 class RegistrationView(APIView):
 

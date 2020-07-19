@@ -4,11 +4,19 @@ A description of all the API endpoints, their URL and request parameters.
 ### Users
 #### View User
 ```
-url : /users/viewuser
+url : /users/profile/
 method : GET
 
 Successful : 200_OK
 Unsuccessful : 404_BAD_REQUEST
+
+Response : {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+}
 
 Note : User needs to be logged in to use this API.
 ```

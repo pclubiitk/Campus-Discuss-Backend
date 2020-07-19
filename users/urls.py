@@ -14,5 +14,5 @@ urlpatterns = [
     path('feed/', UserFeedView.as_view(), name='fetch-feed'),
     path('<int:pk>/posts/', PostsByUserView.as_view(), name="posts-by-user"),
     path('bookmarks/',PostsByBookmarksView.as_view(),name="posts_by_bookmarks"),
-    path('viewuser/',UserView.as_view(),name="view-logged-in-user")
+    path('profile/',UserView.as_view(),name="view-logged-in-user")
 ]
