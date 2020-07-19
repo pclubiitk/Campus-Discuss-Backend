@@ -27,7 +27,7 @@ class CreatePostView(APIView):
             post_title = request.data.get("title", "")
             stream_title = request.data.get("stream", "")
             stream = Stream.objects.get(title=stream_title)
-            follow_stream = IsFollowing(request.session["username"], stream_title)
+            follow_stream = IsFollowing(request.session["username"], stream.pk)
             if follow_stream == False:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
             Post.objects.create(post_title=post_title, post_text=post_text, author=user, stream=stream)

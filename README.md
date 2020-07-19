@@ -245,6 +245,23 @@ Successful : [
 200_OK
 Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 ```
+#### Fetch all Streams
+```
+url : /streams/all/
+method : GET
+```
+```
+Successful : [
+    {
+        "title",
+        "description",
+        "pk",
+        "is_subscribed"
+    },
+]
+200_OK
+Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
+```
 ### Bookmark
 #### Bookmark/Unbookmark
 To bookmark a post or to unbookmark already existing bookmark

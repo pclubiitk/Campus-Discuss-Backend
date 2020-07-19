@@ -1,9 +1,9 @@
 from .models import Stream
 from users.models import User
 
-def IsFollowing(username, stream_title):
+def IsFollowing(username, pk):
     try:
-        stream = Stream.objects.get(title=stream_title)
+        stream = Stream.objects.get(pk=pk)
         user = stream.followed_by.get(username=username)
         return True
     except:
