@@ -60,16 +60,34 @@ class DeleteComment(APIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def recursiveGetComments(comment):
+    parent = comment.pk
+    replies = Comment.objects.filter(parent=parent)
+    if len(replies) == 0:
+        serializer = CommentSerializer(comment)
+        data = serializer.data
+        data['replies'] = []
+        return data
+    else:
+        reply_data = []
+        for reply in replies:
+            reply_data.append(recursiveGetComments(reply))
+        serializer = CommentSerializer(comment)
+        data = serializer.data
+        data['replies'] = reply_data
+        return data
+
 class ViewComments(APIView):
 
     def get(self, request, pk):
         try:
             post = Post.objects.get(pk=pk)
             comments = Comment.objects.filter(post=post)
+            base_comments = comments.filter(parent__isnull=True)
             response = []
-            for comment in comments:
-                serializer = CommentSerializer(comment)
-                response.append(serializer.data)
+            for comment in base_comments:
+                data = recursiveGetComments(comment)
+                response.append(data)
             return Response(response)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
