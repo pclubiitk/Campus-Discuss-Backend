@@ -2,6 +2,16 @@
 ## API Endpoints
 A description of all the API endpoints, their URL and request parameters.
 ### Users
+#### View User
+```
+url : /users/viewuser
+method : GET
+
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST
+
+Note : User needs to be logged in to use this API.
+```
 #### Login
 ```
 url : /users/auth/login/
