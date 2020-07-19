@@ -150,6 +150,7 @@ method : GET
 ```
 ```
 Successful : {
+                "pk",
                 "post_title",
                 "post_text",
                 "pub_date",
@@ -271,6 +272,7 @@ pk = primary key of the post
 ```
 Successful : [
     {
+        "pk",
         "parent",
         "post",
         "content",
