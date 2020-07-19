@@ -20,8 +20,8 @@ class FollowStreamView(APIView):
         user = IsLoggedIn(request)
         if user is not None:
             try:
-                stream_title = request.data.get("title")
-                stream = Stream.objects.get(title=stream_title)
+                pk = request.data.get("pk")
+                stream = Stream.objects.get(pk=pk)
                 stream.followed_by.add(user)
                 stream.save()
                 return Response(status=status.HTTP_200_OK)
@@ -37,10 +37,10 @@ class UnfollowStreamView(APIView):
         user = IsLoggedIn(request)
         if user is not None:
             try:
-                stream_title = request.data.get("title", "")
-                if IsFollowing(user.username, stream_title) == False:
+                [k] = request.data.get("pk", "")
+                if IsFollowing(user.username, pk) == False:
                     return Response(status=status.HTTP_404_NOT_FOUND)
-                stream = Stream.objects.get(title=stream_title)
+                stream = Stream.objects.get(pk=pk)
                 stream.followed_by.remove(user)
                 return Response(status=status.HTTP_200_OK)
 
@@ -70,5 +70,28 @@ class SubbedStreamsView(APIView):
             streams = Stream.objects.filter(followed_by=user)
             serializer = StreamSerializer(streams, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
+        except :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class AllStreamsView(APIView):
+
+    def get(self, request):
+        try:
+            user = IsLoggedIn(request)
+            if user is None:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            subbed_streams = Stream.objects.filter(followed_by=user)
+            serializer = StreamSerializer(subbed_streams, many=True)
+            subbed = serializer.data
+            for stream in subbed:
+                stream['is_subscribed']=True
+            unsubbed_streams = Stream.objects.all().exclude(followed_by=user)
+            serializer = StreamSerializer(unsubbed_streams, many=True)
+            unsubbed = serializer.data
+            for stream in unsubbed:
+                stream['is_subscribed']=False
+
+            data = unsubbed + subbed
+            return Response(data, status=status.HTTP_200_OK)
+        except :
             return Response(status=status.HTTP_400_BAD_REQUEST)
