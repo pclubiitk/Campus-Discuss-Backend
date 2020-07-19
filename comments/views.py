@@ -23,11 +23,17 @@ class CreateComment(APIView):
             try:
                 parent_id = request.data['parent_id']
                 parent_comment = Comment.objects.get(pk=parent_id)
-                Comment.objects.create(user=user, content=content, post=post, parent=parent_comment)
-                return Response(status=status.HTTP_200_OK)
+                comment = Comment.objects.create(user=user, content=content, post=post, parent=parent_comment)
+                serializer = CommentSerializer(comment)
+                data = serializer.data
+                data['replies'] = []
+                return Response(data, status=status.HTTP_200_OK)
             except: 
-                Comment.objects.create(user=user,content=content,post=post)
-                return Response(status=status.HTTP_200_OK)
+                comment = Comment.objects.create(user=user, content=content, post=post)
+                serializer = CommentSerializer(comment)
+                data = serializer.data
+                data['replies'] = []
+                return Response(data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

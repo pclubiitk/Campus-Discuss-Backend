@@ -288,7 +288,16 @@ parameters = {
 comments : parent_id is not required if the comment is not a reply
 ```
 ```
-Successful : 200_OK
+Successful : {
+        "pk",
+        "parent",
+        "post",
+        "content",
+        "created_at",
+        "user"
+        "replies": []
+    }
+200_OK
 Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED / 404_NOT_FOUND
 ```
 #### Delete Comment
