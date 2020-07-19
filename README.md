@@ -288,7 +288,7 @@ Successful : 204_NO_CONTENT
 Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED / 404_NOT_FOUND
 ```
 #### Fetch Comments by Post
-View all the comments (and their replies) of a post.
+View all the comments (and their replies) of a post recursively.
 ```
 url: /comments/view/<int:pk>/
 method : GET
@@ -303,6 +303,10 @@ Successful : [
         "content",
         "created_at",
         "user"
+        "replies": [
+            <comment>,
+            <comment>
+        ]
     },
 ]
 Unsuccessful : 404_NOT_FOUND
