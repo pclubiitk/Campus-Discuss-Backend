@@ -17,7 +17,20 @@ import bcrypt
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from bookmark.models import Bookmark
-#@csrf_exempt
+from users.serializers import UserViewSerializer
+# @csrf_exempt
+
+class UserView(APIView):
+
+    def get(self, request):
+        try:
+            user = IsLoggedIn(request)
+            if user is None:
+                return HttpResponse("User not logged in.",status=401)
+            serializer = UserViewSerializer(user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return HttpResponse("Bad Request.",status=400)
 
 class RegistrationView(APIView):
 

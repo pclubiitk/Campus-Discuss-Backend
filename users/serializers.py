@@ -9,3 +9,15 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "name"
         )
+
+class UserViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+        )
