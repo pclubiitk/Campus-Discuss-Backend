@@ -58,7 +58,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 To unfollow a user who is already followed.
 ```
 url : /users/unfollow/
-method : DELETE
+method : POST
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
 ```
@@ -143,7 +143,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 Allows deletion of a post by its author.
 ```
 url : /posts/delete/
-method : DELETE
+method : POST
 parameters = {"pk" : "<primary key of the post>"}
 ```
 ```
@@ -199,8 +199,8 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 To unfollow a stream.
 ```
 url : /streams/unfollow/
-method : DELETE
-parameters = {"title" : "<title of the stream to be unfollowed>"}
+method : POST
+parameters = {"pk" : "<pk of the stream to be unfollowed>"}
 ```
 ```
 Successful : 200_OK
