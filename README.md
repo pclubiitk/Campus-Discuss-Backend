@@ -189,7 +189,7 @@ To follow a stream.
 ```
 url : /streams/follow/
 method : PUT
-parameters = {"title" : "<title of the stream to be followed>"}
+parameters = {"pk" : "<pk of the stream to be followed>"}
 ```
 ```
 Successful : 200_OK
