@@ -304,7 +304,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED / 404_NOT_FOUND
 To delete a comment on a post(all sub-comments will be deleted)/delete sub-comments(all of its sub-comments will be deleted).Recursive deletion will be followed
 ```
 url : /comments/delete
-method : DELETE
+method : POST
 parameters = {
     "pk":"<primary key of the comment>"
 }
