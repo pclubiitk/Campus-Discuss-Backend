@@ -164,7 +164,7 @@ Note : User needs to be logged in to use this API.
 ```
 #### View Other's Profile(by roll)
 ```
-url : /users/peoplename/
+url : /users/peopleroll/
 method : POST
 parameters = {
             "roll"
