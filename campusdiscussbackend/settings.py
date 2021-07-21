@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'bookmark.apps.BookmarkConfig',
     'tokens.apps.TokensConfig',
     'rest_framework',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -71,14 +72,22 @@ REST_FRAMEWORK = {
 CSRF_COOKIE_SECURE = True
 
 MIDDLEWARE = [
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3001',
+)
 
 ROOT_URLCONF = 'campusdiscussbackend.urls'
 
@@ -105,15 +114,17 @@ WSGI_APPLICATION = 'campusdiscussbackend.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
-        "USER": "vikrant",
-        "PASSWORD": get_secret("DB_PASSWORD"),
-        'HOST': 'localhost',
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydb',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
+#EXPO_SERVER="http://127.0.0.1:8080/"
 EXPO_SERVER="https://server.com"
 
 # Password validation
@@ -162,5 +173,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
-
+#APPEND_SLASH=False
