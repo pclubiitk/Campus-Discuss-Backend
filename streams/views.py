@@ -33,11 +33,11 @@ class FollowStreamView(APIView):
 
 class UnfollowStreamView(APIView):
 
-    def delete(self, request):
+    def post(self, request):
         user = IsLoggedIn(request)
         if user is not None:
             try:
-                [k] = request.data.get("pk", "")
+                pk = request.data.get("pk", "")
                 if IsFollowing(user.username, pk) == False:
                     return Response(status=status.HTTP_404_NOT_FOUND)
                 stream = Stream.objects.get(pk=pk)
