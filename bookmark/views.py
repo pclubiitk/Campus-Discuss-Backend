@@ -12,7 +12,7 @@ class CreateAndDeleteBookmark(APIView):
             pk = request.data['pk']
             try:
                 post = Post.objects.get(pk=pk)
-            except post.DoesNotExist:
+            except Post.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             user = IsLoggedIn(request)
             if user is None:
