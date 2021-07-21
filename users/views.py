@@ -46,21 +46,151 @@ class RegistrationView(APIView):
     def get(self, request):
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
+class ResetPassView(APIView):
+
+    def post(self, request):
+        if IsRegistered(request) is True:
+            ResetPasswordEmail(request)
+            return Response(status = status.HTTP_202_ACCEPTED)
+        if IsRegistered(request) is False:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        if IsRegistered(request) is None:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+#Create Forgot password API
+class ForgotPassView(APIView):
+
+    def post(self, request):
+        if IsRegistered(request) is True:
+            ForgotPassMailer(request)
+            return Response(status = status.HTTP_202_ACCEPTED)
+        if IsRegistered(request) is False:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        if IsRegistered(request) is None:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+def ForgotPassMailer(request): 
+    if request.method == "POST":
+        try:
+            roll_no = request.data['roll']
+            user_data = User.objects.get(roll = roll_no)
+            sender = EMAIL_HOST_USER
+            recipient = user_data.email
+            name = user_data.name
+            user_code = user_data.generate_verification_code()
+            user_link = EMAIL_LINK["ForgotPass"].format(code = user_code)
+            subject = EMAIL_SUBJECT["ForgotPass"]
+            body = EMAIL_BODY["ForgotPass"].format(name=name, link=user_link)
+            send_mail(subject, body, sender, [recipient], fail_silently=False)
+            return redirect(REDIRECT_LINK["ForgotPass"])
+        except:
+            return HttpResponse("Please set up email host details!", status=206)
+    else :
+        return HttpResponse("Invalid request!", status=400)
+@api_view(['POST'])
+def ForgotPass(request,token):
+    if request.method == "POST":
+        try:
+            user_data=User.objects.get(verification_code=token)
+            if user_data.activated==True:
+                user_data.activated=False
+                user_data.save()
+                response={
+                    'status':'success',
+                    'code':status.HTTP_200_OK,
+                    'message':'Account successfully deactivated. Now follow activation process to create new password and activate account',                }
+                return Response(response)
+            else:
+                response={
+                'code':'status.HTTP_401_UNAUTHORIZED',
+                'message':'Token already used'}
+                return Response(response,status=401)  
+        except:
+            response={
+                    'code':'status.HTTP_401_UNAUTHORIZED',
+                    'message':'Invalid token or invalid request'
+                }
+            return Response(response,status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return HttpResponse("Invalid Request",status=400)
+
+#
+
+#Create update fblink API
+class FbLinkView(APIView):
+
+    def post(self, request):
+        user = IsLoggedIn(request)
+        if user is not None:
+            try:
+                fb_link = request.data.get("fblink", "")
+                user.fblink=fb_link
+                user.save()
+                return Response(status = status.HTTP_200_OK)
+            
+            except:
+                return Response(status = status.HTTP_400_BAD_REQUEST)
+        
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+#
+
+#Create Friend's profile(by name) API
+class PeopleProfileViewName(APIView):
+
+    def post(self,request):
+        try:
+            username = request.data.get("username", "")
+            user = User.objects.get(username=username)
+            if user is None:
+                return HttpResponse("User does not exist.",status=401)
+            serializer = UserViewSerializer(user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return HttpResponse("Bad Request.",status=400)
+# 
+#Create Friend's profile(by roll) API
+class PeopleProfileViewRoll(APIView):
+
+    def post(self,request):
+        try:
+            roll_no = request.data.get("roll", "")
+            user = User.objects.get(roll=roll_no)
+            if user is None:
+                return HttpResponse("User does not exist.",status=401)
+            serializer = UserViewSerializer(user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return HttpResponse("Bad Request.",status=400)
+# 
 class LoginView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = IsLoggedIn(request)
         if user is not None :
             return Response(status = status.HTTP_400_BAD_REQUEST)
+        
         username = request.data.get("username", "")
         password = request.data.get("password", "")
+        '''
+        ###
+        request.session["username"] = username 
+        request.session.modified = True
+        return Response(status = status.HTTP_200_OK)
+        ###
+        '''
         #encode converts a str type to byte type
         #when storing in database we decode() it to str type then store in charfield
         #any bcrypt function accepts only byte type 
         try:
             user = User.objects.get(username = username, activated = True)
             if user is not None:
-                if bcrypt.checkpw(password.encode(), user.password.encode()):
+                if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
                     request.session["username"] = username 
                     request.session.modified = True
                     return Response(status = status.HTTP_200_OK)
@@ -106,7 +236,7 @@ class FollowUserView(APIView):
 
 class UnfollowUserView(APIView):
 
-    def delete(self, request):
+    def post(self, request):
         user = IsLoggedIn(request)
         if user is not None:
             username = request.data.get("username", "")
@@ -163,7 +293,7 @@ def ActivationMailer(request):
         return HttpResponse("Invalid request!", status=400)
 
 def HashPass(password):
-    password=password.encode()
+    password=password.encode('utf-8')
     return bcrypt.hashpw(password,bcrypt.gensalt())
 
 # @csrf_exempt
@@ -219,7 +349,7 @@ def ResetPasswordEmail(request):
         return HttpResponse("Invalid request!", status=400)
 
 def pass_checker(old,password):
-    return bcrypt.checkpw(old.encode(),password)
+    return bcrypt.checkpw(old.encode("utf-8"),password)
 
 # @csrf_exempt
 @api_view(['POST'])
@@ -231,7 +361,7 @@ def ResetPassword(request,token):
             old=request.data['old_password']
             user_data=User.objects.get(verification_code=token)
             password=(user_data.password)
-            password=password.encode()
+            password=password.encode("utf-8")
             if user_data.activated==True:
                 if(new1==new2):
                     if(pass_checker(old,password)==True):
@@ -296,3 +426,4 @@ class PostsByBookmarksView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
