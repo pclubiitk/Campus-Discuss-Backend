@@ -46,7 +46,7 @@ def recursiveDelete(comment):
 
 class DeleteComment(APIView):
     
-    def post(self, request):
+    def delete(self, request):
         try:
             user = IsLoggedIn(request)
             if user is None:
