@@ -19,5 +19,6 @@ urlpatterns = [
     path('forgotpass/code=<str:token>/',ForgotPass,name="forgot-pass"),
     path('peoplename/',PeopleProfileViewName.as_view(),name="view-any-user-by-name" ),
     path('peopleroll/',PeopleProfileViewRoll.as_view(),name="view-any-user-by-roll" ),
+    path('peopleusername/',PeopleProfileViewUserName.as_view(),name="view-any-user-by-username" ),
     path('updatefb/',FbLinkView.as_view(),name="update-fb-link" ),
 ]
