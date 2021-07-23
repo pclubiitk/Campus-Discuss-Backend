@@ -147,19 +147,41 @@ Note : User needs to be logged in to use this API.
 url : /users/peoplename/
 method : POST
 parameters = {
-            "username"
+            "name"
  }
 Successful : 200_OK
 Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
 
-Response : {
+Response :[ 
+        {
             "roll",
             "username",
             "name",
             "email",
             "fblink"
-}
+        },
+      ]
+Note : User needs to be logged in to use this API.
+```
+#### View Other's Profile(by username)
+```
+url : /users/peoplename/
+method : POST
+parameters = {
+            "username"
+ }
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
 
+Response : 
+        {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+        }
+      
 Note : User needs to be logged in to use this API.
 ```
 #### View Other's Profile(by roll)
@@ -199,7 +221,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 To unfollow a user who is already followed.
 ```
 url : /users/unfollow/
-method : POST
+method : DELETE
 parameters = {"username" : "<username of the user to be unfollowed">}
 ```
 ```
@@ -284,7 +306,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 Allows deletion of a post by its author.
 ```
 url : /posts/delete/
-method : POST
+method : DELETE
 parameters = {"pk" : "<primary key of the post>"}
 ```
 ```
@@ -340,7 +362,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED
 To unfollow a stream.
 ```
 url : /streams/unfollow/
-method : POST
+method : DELETE
 parameters = {"pk" : "<pk of the stream to be unfollowed>"}
 ```
 ```
@@ -445,7 +467,7 @@ Unsuccessful : 400_BAD_REQUEST / 401_UNAUTHORIZED / 404_NOT_FOUND
 To delete a comment on a post(all sub-comments will be deleted)/delete sub-comments(all of its sub-comments will be deleted).Recursive deletion will be followed
 ```
 url : /comments/delete
-method : POST
+method : DELETE
 parameters = {
     "pk":"<primary key of the comment>"
 }
