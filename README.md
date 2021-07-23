@@ -165,7 +165,7 @@ Note : User needs to be logged in to use this API.
 ```
 #### View Other's Profile(by username)
 ```
-url : /users/peoplename/
+url : /users/peopleusername/
 method : POST
 parameters = {
             "username"
