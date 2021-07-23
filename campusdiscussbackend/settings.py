@@ -83,11 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3001',
-)
 
 ROOT_URLCONF = 'campusdiscussbackend.urls'
 
@@ -118,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mydb',
         'USER': 'postgres',
-        'PASSWORD': 'password',
+        'PASSWORD': get_secret("DB_PASSWORD"),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
