@@ -38,7 +38,7 @@ class CreatePostView(APIView):
 
 class DeletePostView(APIView):
 
-    def post(self, request):
+    def delete(self, request):
         user = IsLoggedIn(request)
         if user is not None:
             try:
