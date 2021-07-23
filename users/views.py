@@ -30,7 +30,7 @@ class UserView(APIView):
             serializer = UserViewSerializer(user)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
-            return HttpResponse("Bad Request.",status=400)
+            return Response("Bad Request.",status=status.HTTP_400_BAD_REQUEST)
 
 class RegistrationView(APIView):
 
@@ -89,9 +89,10 @@ def ForgotPassMailer(request):
             send_mail(subject, body, sender, [recipient], fail_silently=False)
             return redirect(REDIRECT_LINK["ForgotPass"])
         except:
-            return HttpResponse("Please set up email host details!", status=206)
+            return Response("Please set up email host details!", status=status.HTTP_206_PARTIAL_CONTENT)
     else :
-        return HttpResponse("Invalid request!", status=400)
+        return Response("Invalid request!", status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 def ForgotPass(request,token):
     if request.method == "POST":
@@ -102,22 +103,20 @@ def ForgotPass(request,token):
                 user_data.save()
                 response={
                     'status':'success',
-                    'code':status.HTTP_200_OK,
+                    
                     'message':'Account successfully deactivated. Now follow activation process to create new password and activate account',                }
-                return Response(response)
+                return Response(response,status=status.HTTP_200_OK)
             else:
                 response={
-                'code':'status.HTTP_401_UNAUTHORIZED',
                 'message':'Token already used'}
-                return Response(response,status=401)  
+                return Response(response,status=status.HTTP_401_UNAUTHORIZED)  
         except:
             response={
-                    'code':'status.HTTP_401_UNAUTHORIZED',
                     'message':'Invalid token or invalid request'
                 }
             return Response(response,status=status.HTTP_401_UNAUTHORIZED)
     else:
-        return HttpResponse("Invalid Request",status=400)
+        return Response("Invalid Request",status=status.HTTP_400_BAD_REQUEST)
 
 #
 
@@ -140,19 +139,34 @@ class FbLinkView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 #
 
-#Create Friend's profile(by name) API
-class PeopleProfileViewName(APIView):
+#Create Friend's profile(by username) API
+class PeopleProfileViewUserName(APIView):
 
     def post(self,request):
         try:
             username = request.data.get("username", "")
             user = User.objects.get(username=username)
             if user is None:
-                return HttpResponse("User does not exist.",status=401)
+                return Response("User does not exist.",status=status.HTTP_401_UNAUTHORIZED)
             serializer = UserViewSerializer(user)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
-            return HttpResponse("Bad Request.",status=400)
+            return Response("Bad Request.",status=status.HTTP_400_BAD_REQUEST)
+# 
+#Create Friend's profile(by name) API
+class PeopleProfileViewName(APIView):
+
+    def post(self,request):
+        try:
+            name = request.data.get("name", "")
+            users = User.objects.filter(name=name)
+            userList=list()
+            for user in users:
+                userList.append(user)
+            serializer = UserViewSerializer(users,many=True)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response("Bad Request.",status=status.HTTP_400_BAD_REQUEST)
 # 
 #Create Friend's profile(by roll) API
 class PeopleProfileViewRoll(APIView):
@@ -162,11 +176,11 @@ class PeopleProfileViewRoll(APIView):
             roll_no = request.data.get("roll", "")
             user = User.objects.get(roll=roll_no)
             if user is None:
-                return HttpResponse("User does not exist.",status=401)
+                return Response("User does not exist.",status=status.HTTP_401_UNAUTHORIZED)
             serializer = UserViewSerializer(user)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
-            return HttpResponse("Bad Request.",status=400)
+            return Response("Bad Request.",status=status.HTTP_400_BAD_REQUEST)
 # 
 class LoginView(APIView):
 
@@ -177,13 +191,6 @@ class LoginView(APIView):
         
         username = request.data.get("username", "")
         password = request.data.get("password", "")
-        '''
-        ###
-        request.session["username"] = username 
-        request.session.modified = True
-        return Response(status = status.HTTP_200_OK)
-        ###
-        '''
         #encode converts a str type to byte type
         #when storing in database we decode() it to str type then store in charfield
         #any bcrypt function accepts only byte type 
@@ -288,9 +295,9 @@ def ActivationMailer(request):
             send_mail(subject, body, sender, [recipient], fail_silently=False)
             return redirect(REDIRECT_LINK["Activation"])
         except:
-            return HttpResponse("Please set up email host details!", status=206)
+            return Response("Please set up email host details!", status=status.HTTP_206_PARTIAL_CONTENT)
     else :
-        return HttpResponse("Invalid request!", status=400)
+        return Response("Invalid request!", status=status.HTTP_400_BAD_REQUEST)
 
 def HashPass(password):
     password=password.encode('utf-8')
@@ -317,7 +324,7 @@ def SetPasswordAndActivate(request,token):
                 response={
                 'code':'status.HTTP_401_UNAUTHORIZED',
                 'message':'Token already used'}
-                return Response(response,status=401)  
+                return Response(response,status=status.HTTP_401_UNAUTHORIZED)  
         except:
             response={
                     'code':'status.HTTP_401_UNAUTHORIZED',
@@ -325,7 +332,7 @@ def SetPasswordAndActivate(request,token):
                 }
             return Response(response,status=status.HTTP_401_UNAUTHORIZED)
     else:
-        return HttpResponse("Invalid Request",status=400)
+        return HttpResponse("Invalid Request",status=status.HTTP_400_BAD_REQUEST)
 
 
 # @csrf_exempt
@@ -344,9 +351,9 @@ def ResetPasswordEmail(request):
             send_mail(subject, body, sender, [recipient], fail_silently=False)
             return redirect(REDIRECT_LINK["PasswordReset"])
         except:
-            return HttpResponse("Please set up email host details!", status=206)
+            return Response("Please set up email host details!", status=status.HTTP_206_PARTIAL_CONTENT)
     else :
-        return HttpResponse("Invalid request!", status=400)
+        return Response("Invalid request!", status=status.HTTP_400_BAD_REQUEST)
 
 def pass_checker(old,password):
     return bcrypt.checkpw(old.encode("utf-8"),password)
@@ -392,7 +399,7 @@ def ResetPassword(request,token):
                 response={
                 'code':'status.HTTP_401_UNAUTHORIZED',
                 'message':'Unauthorised user or Account not activated'}
-                return Response(response,status=401)  
+                return Response(response,status=status.HTTP_401_UNAUTHORIZED)  
         except:
             response={
                     'code':'status.HTTP_401_UNAUTHORIZED',
@@ -400,7 +407,7 @@ def ResetPassword(request,token):
                 }
             return Response(response,status=status.HTTP_401_UNAUTHORIZED)
     else:
-        return HttpResponse("Invalid Request",status=400) 
+        return HttpResponse("Invalid Request",status=status.HTTP_400_BAD_REQUEST) 
 
 class PostsByUserView(APIView):
     def get(self,request,pk):
@@ -426,4 +433,3 @@ class PostsByBookmarksView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
