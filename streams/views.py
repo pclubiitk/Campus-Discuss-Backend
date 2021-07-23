@@ -33,7 +33,7 @@ class FollowStreamView(APIView):
 
 class UnfollowStreamView(APIView):
 
-    def post(self, request):
+    def delete(self, request):
         user = IsLoggedIn(request)
         if user is not None:
             try:
