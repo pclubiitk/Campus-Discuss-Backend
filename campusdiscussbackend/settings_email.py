@@ -3,7 +3,7 @@ Django email-settings for campusdiscussbackend project.
 """
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'mmtp.iitk.ac.in'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
