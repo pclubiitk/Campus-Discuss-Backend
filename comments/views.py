@@ -18,7 +18,7 @@ class CreateComment(APIView):
             content = request.data['content']
             try:
                 post = Post.objects.get(pk=post_id)
-            except post.DoesNotExist:
+            except Post.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             try:
                 parent_id = request.data['parent_id']

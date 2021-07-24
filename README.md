@@ -2,24 +2,7 @@
 ## API Endpoints
 A description of all the API endpoints, their URL and request parameters.
 ### Users
-#### View User
-```
-url : /users/profile/
-method : GET
 
-Successful : 200_OK
-Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
-
-Response : {
-            "roll",
-            "username",
-            "name",
-            "email",
-            "fblink"
-}
-
-Note : User needs to be logged in to use this API.
-```
 #### Login
 ```
 url : /users/auth/login/
@@ -43,6 +26,186 @@ parameters = {}
 Successful : 200_OK
 Unsuccessful : 401_UNAUTHORIZED
 ```
+#### Update FB link
+```
+url : /users/updatefb/
+method : POST
+parameters = {"fblink" : "<Your fb link>"}
+```
+```
+Successful : 200_OK
+Unsuccessful : 401_UNAUTHORIZED / 400_BAD_REQUEST
+
+Note : User needs to be logged in to use this API
+```
+#### Forgot Password Mailer
+```
+url : /users/forgotpassemail/
+method : POST
+parameters = { "roll" : "<Your IITK roll no>"}
+```
+```
+Successful : 200_OK
+Unsuccessful : 401_UNAUTHORIZED / 400_BAD_REQUEST
+
+Note: If successful, it sends a link at the users e-mail id which is described below.
+```
+#### Forgot Password
+```
+url : /users/forgotpass/code=<str:token>/
+method : POST
+parameters = {}
+```
+```
+Successful :{
+               status : 200_OK
+               message : Account successfully deactivated. Now follow activation process to create new password and activate account.
+}
+Unsuccessful : {
+                status : 401_UNAUTHORIZED
+                message : "Token already used" or "Invalid token or invalid request"
+}
+
+```
+#### Reset Password Mailer
+```
+url : /users/resetpassemail/
+method : POST
+parameters = {"roll" : "<Your IITK roll>"}
+```
+```
+Successful : 202_ACCEPTED
+Unsuccessful : 403_FORBIDDEN / 400_BAD_REQUEST
+
+Note : User needs to be logged in to use this API. This sends an e-mail to reset password.
+```
+#### Reset Password
+```
+url : /users/resetpass/code=<str:token>/
+method : POST
+parameters = {
+            "new_password1" : "<Your new password>" ,
+            "new_password2" : "<Your new password again>",
+            "old_password" : "<Your new password>"
+}
+```
+```
+Successful : 200_OK
+Unsuccessful : 401_UNAUTHORIZED
+
+Note : User needs to be logged in to use this API. 
+```
+
+#### Registration Mailer
+```
+url : /users/register/
+method : POST
+parameters = {
+            "roll" : "<Your IITK roll>"
+}
+```
+```
+Successful : 200_OK
+Unsuccessful : 401_UNAUTHORIZED
+
+Note : This sends an activation mail to the user.
+```
+#### Registration and set password
+```
+url : /users/register/verify/code=<str:token>/
+method : POST
+parameters = {
+            "password" : "<Your password>"
+}
+```
+```
+Successful : 200_OK
+Unsuccessful : 401_UNAUTHORIZED
+
+```
+
+#### View User's Profile
+```
+url : /users/profile/
+method : GET
+
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
+
+Response : {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+}
+
+Note : User needs to be logged in to use this API.
+```
+#### View Other's Profile(by name)
+```
+url : /users/peoplename/
+method : POST
+parameters = {
+            "name"
+ }
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
+
+Response :[ 
+        {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+        },
+      ]
+Note : User needs to be logged in to use this API.
+```
+#### View Other's Profile(by username)
+```
+url : /users/peopleusername/
+method : POST
+parameters = {
+            "username"
+ }
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
+
+Response : 
+        {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+        }
+      
+Note : User needs to be logged in to use this API.
+```
+#### View Other's Profile(by roll)
+```
+url : /users/peopleroll/
+method : POST
+parameters = {
+            "roll"
+ }
+Successful : 200_OK
+Unsuccessful : 404_BAD_REQUEST / 401_UNAUTHORIZED
+
+Response : {
+            "roll",
+            "username",
+            "name",
+            "email",
+            "fblink"
+}
+
+Note : User needs to be logged in to use this API.
+```
+
+
 #### Follow User
 To follow another user.
 ```
@@ -189,7 +352,7 @@ To follow a stream.
 ```
 url : /streams/follow/
 method : PUT
-parameters = {"title" : "<title of the stream to be followed>"}
+parameters = {"pk" : "<pk of the stream to be followed>"}
 ```
 ```
 Successful : 200_OK
@@ -200,7 +363,7 @@ To unfollow a stream.
 ```
 url : /streams/unfollow/
 method : DELETE
-parameters = {"title" : "<title of the stream to be unfollowed>"}
+parameters = {"pk" : "<pk of the stream to be unfollowed>"}
 ```
 ```
 Successful : 200_OK
