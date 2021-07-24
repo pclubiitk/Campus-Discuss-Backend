@@ -43,9 +43,6 @@ class RegistrationView(APIView):
         if IsRegistered(request) is None:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        return Response(status = status.HTTP_400_BAD_REQUEST)
-
 class ResetPassView(APIView):
 
     def post(self, request):
@@ -56,9 +53,6 @@ class ResetPassView(APIView):
             return Response(status = status.HTTP_403_FORBIDDEN)
         if IsRegistered(request) is None:
             return Response(status = status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request):
-        return Response(status = status.HTTP_400_BAD_REQUEST)
 
 #Create Forgot password API
 class ForgotPassView(APIView):
@@ -72,8 +66,6 @@ class ForgotPassView(APIView):
         if IsRegistered(request) is None:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        return Response(status = status.HTTP_400_BAD_REQUEST)
 def ForgotPassMailer(request): 
     if request.method == "POST":
         try:
