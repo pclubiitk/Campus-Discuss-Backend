@@ -235,7 +235,7 @@ class FollowUserView(APIView):
 
 class UnfollowUserView(APIView):
 
-    def post(self, request):
+    def delete(self, request):
         user = IsLoggedIn(request)
         if user is not None:
             username = request.data.get("username", "")
